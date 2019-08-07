@@ -1,0 +1,31 @@
+version: "3"
+services:
+    nginx:
+        image: nginx
+        depends_on:
+         - api
+         - mysql
+         - gui
+        ports:
+         - "8888:80"
+    api:
+        build: api/
+        ports:
+         - "3001:3001"
+    gui:
+        build: web-gui/
+        ports:
+         - "4200:4200"
+    mysql:
+        image: mysql:5.7
+        volumes:
+          - ./mysql-data:/var/lib/mysql
+          - ./mysql-init-files:/docker-entrypoint-initdb.d
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: usbw
+          MYSQL_DATABASE: travel
+          MYSQL_USER: root
+          MYSQL_PASSWORD: usbw
+        ports:
+          - "3307:3306"
